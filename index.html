@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CALLBACKS IN JS</title>
+</head>
+<body>
+
+    <h1></h1>
+
+    <div class="div">
+        In JavaScript, a **callback** is a function that is passed into another function as an argument and is executed after some kind of event or task is completed. This is a way to ensure that certain code runs only after another piece of code has finished its execution, which is especially useful in asynchronous operations like reading files, making HTTP requests, or handling user interactions.
+
+        ### Synchronous Callback Example:
+        
+        ```javascript
+        function greet(name, callback) {
+          console.log(`Hello, ${name}!`);
+          callback();
+        }
+        
+        function afterGreeting() {
+          console.log('This is executed after greeting.');
+        }
+        
+        greet('Alice', afterGreeting);
+        ```
+        
+        Here, the function `afterGreeting` is passed as a callback to `greet`. After the greeting message is logged, the `afterGreeting` function is executed.
+        
+        ### Asynchronous Callback Example:
+        
+        Callbacks are particularly important in asynchronous programming. For example, when making HTTP requests or reading a file:
+        
+        ```javascript
+        function fetchData(url, callback) {
+          setTimeout(() => {
+            const data = `Data from ${url}`;
+            callback(data);
+          }, 2000);
+        }
+        
+        function handleData(data) {
+          console.log(`Received: ${data}`);
+        }
+        
+        fetchData('https://example.com', handleData);
+        ```
+        
+        In this example, `fetchData` simulates fetching data asynchronously (with `setTimeout`) and calls the `handleData` function when the data is ready.
+        
+        ### Key Points About Callbacks:
+        
+        1. **Higher-order functions**: A function that accepts another function as an argument or returns a function is called a higher-order function.
+           
+        2. **Callback Hell**: When multiple callbacks are nested within each other, it can lead to complex and difficult-to-maintain code (known as "callback hell" or "pyramid of doom"). Modern JavaScript has improved this with Promises and async/await to make asynchronous code more readable.
+        
+        3. **Error-first callbacks**: A common pattern in Node.js, where the first argument of the callback is reserved for an error (if any), and the second argument for the result.
+        
+           ```javascript
+           function fetchData(callback) {
+             setTimeout(() => {
+               const error = null;
+               const data = "Some data";
+               callback(error, data);
+             }, 1000);
+           }
+        
+           fetchData((error, data) => {
+             if (error) {
+               console.error('Error:', error);
+             } else {
+               console.log('Data:', data);
+             }
+           });
+           ```
+        
+        Callbacks are powerful tools in JavaScript, especially for handling asynchronous operations. Let me know if you'd like more detailed examples or explanations on specific aspects!
+    </div>
+
+    <div class="div">
+        In JavaScript, **Promises** are a way to handle asynchronous operations in a more manageable and readable way compared to traditional callbacks. Promises allow you to work with asynchronous operations in a more structured and less error-prone manner, helping to avoid **callback hell** (the nested, complex structure that can result from using too many callbacks).
+
+### What is a Promise?
+
+A **Promise** is an object representing the eventual completion (or failure) of an asynchronous operation and its resulting value. A Promise is in one of the following states:
+
+- **Pending**: The operation is still ongoing.
+- **Fulfilled**: The operation completed successfully.
+- **Rejected**: The operation failed.
+
+### Basic Syntax of a Promise:
+
+A Promise is created using the `new Promise` constructor, which takes a function called the **executor**. This executor function takes two arguments: `resolve` (which is called when the operation is successful) and `reject` (which is called when the operation fails).
+
+```javascript
+let myPromise = new Promise((resolve, reject) => {
+  let success = true;  // Simulating an operation outcome
+  
+  if(success) {
+    resolve("Operation was successful!");  // Fulfilled
+  } else {
+    reject("Operation failed!");  // Rejected
+  }
+});
+```
+
+### Consuming a Promise:
+
+Once a Promise is created, we can consume it using the `.then()` and `.catch()` methods.
+
+- `.then()` is used to handle the fulfillment of the Promise.
+- `.catch()` is used to handle errors (rejection).
+
+#### Example:
+
+```javascript
+let myPromise = new Promise((resolve, reject) => {
+  let success = true;  // Simulating an operation outcome
+  
+  if(success) {
+    resolve("Operation was successful!");
+  } else {
+    reject("Operation failed!");
+  }
+});
+
+myPromise
+  .then(result => {
+    console.log(result);  // This runs if the promise is fulfilled
+  })
+  .catch(error => {
+    console.error(error);  // This runs if the promise is rejected
+  });
+```
+
+### Chaining Promises:
+
+One of the main benefits of Promises is the ability to chain multiple `.then()` calls. This allows you to handle asynchronous operations in a sequence, making the code easier to follow compared to nested callbacks.
+
+```javascript
+let myPromise = new Promise((resolve, reject) => {
+  resolve("First operation completed.");
+});
+
+myPromise
+  .then(result => {
+    console.log(result);
+    return "Second operation completed.";  // Returning a new value for the next `.then`
+  })
+  .then(result => {
+    console.log(result);
+    return "Third operation completed.";
+  })
+  .then(result => {
+    console.log(result);
+  })
+  .catch(error => {
+    console.error(error);
+  });
+```
+
+### Promise.all:
+
+`Promise.all` is used when you want to wait for multiple promises to resolve and then proceed with further operations. If any of the promises reject, `Promise.all` immediately rejects with the reason of the first promise that rejected.
+
+```javascript
+let promise1 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 1000, "First");
+});
+
+let promise2 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 2000, "Second");
+});
+
+Promise.all([promise1, promise2])
+  .then(results => {
+    console.log(results);  // ["First", "Second"]
+  })
+  .catch(error => {
+    console.log(error);
+  });
+```
+
+### Promise.race:
+
+`Promise.race` returns the result of the first promise that settles (either fulfills or rejects).
+
+```javascript
+let promise1 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 1000, "First");
+});
+
+let promise2 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 500, "Second");
+});
+
+Promise.race([promise1, promise2])
+  .then(result => {
+    console.log(result);  // "Second" because it resolves first
+  })
+  .catch(error => {
+    console.log(error);
+  });
+```
+
+### `async`/`await` Syntax (Built on Promises):
+
+`async` and `await` are newer JavaScript features that allow you to work with promises in a more synchronous-looking manner. They make asynchronous code look and behave like synchronous code, which improves readability.
+
+- **`async`**: Marks a function as asynchronous and ensures it always returns a Promise.
+- **`await`**: Used inside an `async` function to pause execution until the Promise resolves.
+
+```javascript
+async function fetchData() {
+  try {
+    let response = await fetch('https://jsonplaceholder.typicode.com/posts');
+    let data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+fetchData();
+```
+
+### Key Differences Between Promises and Callbacks:
+
+- **Readability**: Promises are more readable, as they avoid nested callbacks and allow for chaining `.then()` and `.catch()` for error handling.
+- **Error Handling**: Promises have a built-in mechanism for handling errors, either by using `.catch()` or `try`/`catch` with `async`/`await`.
+- **Concurrency**: Promises make it easier to handle multiple asynchronous operations concurrently using methods like `Promise.all()` and `Promise.race()`.
+
+### Conclusion:
+
+Promises provide a cleaner and more powerful way to handle asynchronous operations in JavaScript. By avoiding callback hell and offering better error handling and chaining capabilities, they make asynchronous code much easier to manage. If you're working with asynchronous operations, it’s highly recommended to use Promises or `async`/`await` for better readability and maintainability.
+
+Let me know if you'd like further examples or clarification!
+    </div>
+    
+    <script>
+        // Promises Examples
+
+//A Promise handles asynchronous operations and prevents callback hell.
+
+//1. Simple Promise
+
+let promise = new Promise((resolve, reject) => {
+    setTimeout(() => resolve("Success!"), 2000);
+});
+promise.then(console.log);
+
+//2. Reject a Promise
+
+let promise_1 = new Promise((resolve, reject) => {
+    setTimeout(() => reject("Error occurred!"), 2000);
+});
+promise.catch(console.error);
+
+//3. Chaining Promises
+
+let promise_2 = new Promise(resolve => setTimeout(() => resolve(10), 1000));
+promise
+  .then(num => num * 2)
+  .then(num => num + 5)
+  .then(console.log);
+
+//4. Promise with setTimeout
+
+function delayedMessage() {
+    return new Promise(resolve => {
+        setTimeout(() => resolve("Hello after 3 seconds!"), 3000);
+    });
+}
+delayedMessage().then(console.log);
+
+//5. Fetch Data (Basic)
+
+fetch("https://jsonplaceholder.typicode.com/posts/1")
+  .then(response => response.json())
+  .then(console.log);
+
+//6. Fetch Data with Error Handling
+
+fetch("https://jsonplaceholder.typicode.com/posts/1")
+  .then(response => response.json())
+  .then(console.log)
+  .catch(console.error);
+
+//7. Promise.all Example
+
+let p1 = Promise.resolve(10);
+let p2 = new Promise(res => setTimeout(() => res(20), 2000));
+let p3 = Promise.resolve(30);
+
+Promise.all([p1, p2, p3]).then(console.log);
+
+//8. Promise.race Example
+
+let p_1 = new Promise(res => setTimeout(() => res("Fastest!"), 1000));
+let p_2 = new Promise(res => setTimeout(() => res("Slower!"), 3000));
+
+Promise.race([p1, p2]).then(console.log);
+
+//9. Reject Handling in Promise.all
+
+Promise.all([
+    Promise.resolve("Success"),
+    Promise.reject("Failed"),
+    Promise.resolve("Another success")
+]).catch(console.error);
+
+//10. Wait for Multiple API Calls
+
+let userData = fetch("https://jsonplaceholder.typicode.com/users/1").then(res => res.json());
+let postData = fetch("https://jsonplaceholder.typicode.com/posts/1").then(res => res.json());
+
+Promise.all([userData, postData]).then(console.log);
+
+
+    </script>
+    <script>
+        //Callbacks Examples
+
+//Callbacks are functions passed as arguments to other functions.
+
+//1. Basic Callback Function
+
+function greet(name, callback) {
+    console.log("Hello, " + name);
+    callback();
+}
+
+function sayGoodbye() {
+    console.log("Goodbye!");
+}
+
+greet("Alice", sayGoodbye);
+
+//2. Callback with setTimeout
+
+function delayedMessage(callback) {
+    setTimeout(() => {
+        console.log("This message appears after 2 seconds.");
+        callback();
+    }, 2000);
+}
+
+delayedMessage(() => console.log("Callback executed!"));
+
+//3. Callback in an Array Function
+
+let numbers = [1, 2, 3, 4];
+numbers.forEach(num => console.log(num * 2));
+
+//4. Custom Map Function Using Callback
+
+function customMap(array, callback) {
+    let newArray = [];
+    for (let item of array) {
+        newArray.push(callback(item));
+    }
+    return newArray;
+}
+
+let doubled = customMap([1, 2, 3], num => num * 2);
+console.log(doubled);
+
+//5. Callback in Event Listener
+
+document.getElementById("btn").addEventListener("click", () => {
+    console.log("Button clicked!");
+});
+
+//6. Callback in API Fetch
+
+function getUserData(callback) {
+    fetch("https://jsonplaceholder.typicode.com/users/1")
+      .then(response => response.json())
+      .then(user => callback(user))
+      .catch(error => console.error(error));
+}
+
+getUserData(user => console.log("User name:", user.name));
+
+//7. Multiple Callbacks
+
+function step1(callback) {
+    console.log("Step 1 complete");
+    callback();
+}
+
+function step2(callback) {
+    console.log("Step 2 complete");
+    callback();
+}
+
+function step3() {
+    console.log("Step 3 complete");
+}
+
+step1(() => step2(step3));
+
+//8. Simulating an API Call with Callback
+
+function fetchData(callback) {
+    setTimeout(() => {
+        callback("Data received");
+    }, 2000);
+}
+
+fetchData(data => console.log(data));
+
+//9. Error Handling in Callbacks
+
+function fetchData(callback, errorCallback) {
+    let success = Math.random() > 0.5;
+    setTimeout(() => {
+        if (success) callback("Data received");
+        else errorCallback("Error fetching data");
+    }, 2000);
+}
+
+fetchData(console.log, console.error);
+
+//10. Callback Hell (Nested Callbacks)
+
+setTimeout(() => {
+    console.log("Step 1");
+    setTimeout(() => {
+        console.log("Step 2");
+        setTimeout(() => {
+            console.log("Step 3");
+        }, 1000);
+    }, 1000);
+}, 1000);
+
+
+    </script>
+</body>
+</html>
