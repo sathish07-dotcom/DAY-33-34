@@ -4,240 +4,232 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CALLBACKS IN JS</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <h1></h1>
-
+    <h1>callback in Javascriot</h1>
+    <h3>In JavaScript, a **callback** is a function that is passed into another function as an argument and is executed after some kind of event or task is completed. This is a way to ensure that certain code runs only after another piece of code has finished its execution, which is especially useful in asynchronous operations like reading files, making HTTP requests, or handling user interactions.
+    </h3>
     <div class="div">
-        In JavaScript, a **callback** is a function that is passed into another function as an argument and is executed after some kind of event or task is completed. This is a way to ensure that certain code runs only after another piece of code has finished its execution, which is especially useful in asynchronous operations like reading files, making HTTP requests, or handling user interactions.
-
-        ### Synchronous Callback Example:
+        <h2>Synchronous Callback Example:
+        </h2>
+<p>
+        function greet(name, callback) { <br>
+          console.log(`Hello, ${name}!`); <br>
+          callback(); <br>
+        } <br>
         
-        ```javascript
-        function greet(name, callback) {
-          console.log(`Hello, ${name}!`);
-          callback();
-        }
+        function afterGreeting() { <br>
+          console.log('This is executed after greeting.'); <br>
+        } <br>
         
-        function afterGreeting() {
-          console.log('This is executed after greeting.');
-        }
+        greet('Alice', afterGreeting); <br>
         
-        greet('Alice', afterGreeting);
-        ```
+        <li>Here, the function `afterGreeting` is passed as a callback to `greet`. After the greeting message is logged, the `afterGreeting` function is executed.
+        </li>
+        </p>
+        <h2>Asynchronous Callback Example:
+        </h2>
+        <li>Callbacks are particularly important in asynchronous programming. For example, when making HTTP requests or reading a file:
+        </li>
+    <p>
+        function fetchData(url, callback) { <br>
+          setTimeout(() => { <br>
+            const data = `Data from ${url}`; <br>
+            callback(data); <br>
+          }, 2000); <br>
+        } <br>
         
-        Here, the function `afterGreeting` is passed as a callback to `greet`. After the greeting message is logged, the `afterGreeting` function is executed.
+        function handleData(data) { <br>
+          console.log(`Received: ${data}`); <br>
+        } <br>
         
-        ### Asynchronous Callback Example:
-        
-        Callbacks are particularly important in asynchronous programming. For example, when making HTTP requests or reading a file:
-        
-        ```javascript
-        function fetchData(url, callback) {
-          setTimeout(() => {
-            const data = `Data from ${url}`;
-            callback(data);
-          }, 2000);
-        }
-        
-        function handleData(data) {
-          console.log(`Received: ${data}`);
-        }
-        
-        fetchData('https://example.com', handleData);
-        ```
-        
-        In this example, `fetchData` simulates fetching data asynchronously (with `setTimeout`) and calls the `handleData` function when the data is ready.
-        
-        ### Key Points About Callbacks:
-        
-        1. **Higher-order functions**: A function that accepts another function as an argument or returns a function is called a higher-order function.
-           
-        2. **Callback Hell**: When multiple callbacks are nested within each other, it can lead to complex and difficult-to-maintain code (known as "callback hell" or "pyramid of doom"). Modern JavaScript has improved this with Promises and async/await to make asynchronous code more readable.
-        
-        3. **Error-first callbacks**: A common pattern in Node.js, where the first argument of the callback is reserved for an error (if any), and the second argument for the result.
-        
-           ```javascript
-           function fetchData(callback) {
-             setTimeout(() => {
-               const error = null;
-               const data = "Some data";
-               callback(error, data);
-             }, 1000);
-           }
-        
-           fetchData((error, data) => {
-             if (error) {
-               console.error('Error:', error);
-             } else {
-               console.log('Data:', data);
-             }
-           });
-           ```
-        
-        Callbacks are powerful tools in JavaScript, especially for handling asynchronous operations. Let me know if you'd like more detailed examples or explanations on specific aspects!
-    </div>
-
-    <div class="div">
-        In JavaScript, **Promises** are a way to handle asynchronous operations in a more manageable and readable way compared to traditional callbacks. Promises allow you to work with asynchronous operations in a more structured and less error-prone manner, helping to avoid **callback hell** (the nested, complex structure that can result from using too many callbacks).
-
-### What is a Promise?
-
-A **Promise** is an object representing the eventual completion (or failure) of an asynchronous operation and its resulting value. A Promise is in one of the following states:
-
-- **Pending**: The operation is still ongoing.
-- **Fulfilled**: The operation completed successfully.
-- **Rejected**: The operation failed.
-
-### Basic Syntax of a Promise:
-
-A Promise is created using the `new Promise` constructor, which takes a function called the **executor**. This executor function takes two arguments: `resolve` (which is called when the operation is successful) and `reject` (which is called when the operation fails).
-
-```javascript
-let myPromise = new Promise((resolve, reject) => {
-  let success = true;  // Simulating an operation outcome
+        fetchData('https://example.com', handleData); <br>
   
-  if(success) {
-    resolve("Operation was successful!");  // Fulfilled
-  } else {
-    reject("Operation failed!");  // Rejected
-  }
-});
-```
+        
+  <li>    In this example, `fetchData` simulates fetching data asynchronously (with `setTimeout`) and calls the `handleData` function when the data is ready.
+  </li>    
+  </p>
+      <h2> Key Points About Callbacks:
+        </h2>
+        <p>Higher-order functions**: A function that accepts another function as an argument or returns a function is called a higher-order function.
+           </p>
+        <p>Callback Hell**: When multiple callbacks are nested within each other, it can lead to complex and difficult-to-maintain code (known as "callback hell" or "pyramid of doom"). Modern JavaScript has improved this with Promises and async/await to make asynchronous code more readable.
+        </p>
+        <p>Error-first callbacks**: A common pattern in Node.js, where the first argument of the callback is reserved for an error (if any), and the second argument for the result.
+        </p>
+           <li>
+           function fetchData(callback) { <br>
+             setTimeout(() => { <br>
+               const error = null; <br>
+               const data = "Some data"; <br>
+               callback(error, data); <br>
+             }, 1000); <br>
+           } <br>
+        
+           fetchData((error, data) => { <br>
+             if (error) { <br>
+               console.error('Error:', error); <br>
+             } else { <br>
+               console.log('Data:', data); <br>
+             } <br>
+           }); <br>
+</li>
+        
+      <li>  Callbacks are powerful tools in JavaScript, especially for handling asynchronous operations. Let me know if you'd like more detailed examples or explanations on specific aspects!
+    </li>
+      </div>
 
-### Consuming a Promise:
+      <h1>Promises in Javascript</h1>
+      <h3> In JavaScript, **Promises** are a way to handle asynchronous operations in a more manageable and readable way compared to traditional callbacks. Promises allow you to work with asynchronous operations in a more structured and less error-prone manner, helping to avoid **callback hell** (the nested, complex structure that can result from using too many callbacks).
+      </h3>
+    <div class="div1">
 
-Once a Promise is created, we can consume it using the `.then()` and `.catch()` methods.
+<h2>What is a Promise?
+</h2>
+<p>A Promise is an object representing the eventual completion (or failure) of an asynchronous operation and its resulting value. A Promise is in one of the following states:
+</p>
+<li>Pending: The operation is still ongoing.</li>
+<li>Fulfilled: The operation completed successfully.</li>
+<li>Rejected: The operation failed.</li>
 
-- `.then()` is used to handle the fulfillment of the Promise.
-- `.catch()` is used to handle errors (rejection).
+<h2>Basic Syntax of a Promise:</h2>
 
-#### Example:
-
-```javascript
-let myPromise = new Promise((resolve, reject) => {
-  let success = true;  // Simulating an operation outcome
+<li>A Promise is created using the `new Promise` constructor, which takes a function called the **executor**. This executor function takes two arguments: `resolve` (which is called when the operation is successful) and `reject` (which is called when the operation fails).
+</li>
+<p>
+let myPromise = new Promise((resolve, reject) => { <br>
+  let success = true;  // Simulating an operation outcome <br>
   
-  if(success) {
-    resolve("Operation was successful!");
-  } else {
-    reject("Operation failed!");
-  }
-});
+  if(success) { <br>
+    resolve("Operation was successful!");  // Fulfilled <br>
+  } else { <br>
+    reject("Operation failed!");  // Rejected <br>
+  } <br>
+}); <br>
+</p>
 
-myPromise
-  .then(result => {
-    console.log(result);  // This runs if the promise is fulfilled
-  })
-  .catch(error => {
-    console.error(error);  // This runs if the promise is rejected
-  });
-```
+<h2>Consuming a Promise:
+</h2>
+<p>Once a Promise is created, we can consume it using the `.then()` and `.catch()` methods.
+</p>
+<li>.then()` is used to handle the fulfillment of the Promise.</li>
+<li>`.catch()` is used to handle errors (rejection).</li>
 
-### Chaining Promises:
+<p>
+let myPromise = new Promise((resolve, reject) => { <br>
+  let success = true;  // Simulating an operation outcome <br>
+  
+  if(success) { <br>
+    resolve("Operation was successful!"); <br>
+  } else { <br>
+    reject("Operation failed!"); <br>
+  } <br>
+}); <br>
 
-One of the main benefits of Promises is the ability to chain multiple `.then()` calls. This allows you to handle asynchronous operations in a sequence, making the code easier to follow compared to nested callbacks.
+myPromise <br>
+  .then(result => { <br>
+    console.log(result);  // This runs if the promise is fulfilled <br>
+  }) <br>
+  .catch(error => { <br>
+    console.error(error);  // This runs if the promise is rejected <br>
+  }); <br>
+</p>
+<h2>Chaining Promises:
+</h2>
+<li>One of the main benefits of Promises is the ability to chain multiple `.then()` calls. This allows you to handle asynchronous operations in a sequence, making the code easier to follow compared to nested callbacks.
+</li>
+<p>
+let myPromise = new Promise((resolve, reject) => { <br>
+  resolve("First operation completed."); <br>
+}); <br>
 
-```javascript
-let myPromise = new Promise((resolve, reject) => {
-  resolve("First operation completed.");
-});
+myPromise <br>
+  .then(result => { <br>
+    console.log(result); <br>
+    return "Second operation completed.";  // Returning a new value for the next `.then` <br>
+  }) <br>
+  .then(result => { <br>
+    console.log(result); <br>
+    return "Third operation completed."; <br>
+  }) <br>
+  .then(result => { <br>
+    console.log(result); <br>
+  }) <br>
+  .catch(error => { <br>
+    console.error(error); <br>
+  }); <br>
+</p>
+<h2> Promise.all:
+</h2>
+<li>`Promise.all` is used when you want to wait for multiple promises to resolve and then proceed with further operations. If any of the promises reject, `Promise.all` immediately rejects with the reason of the first promise that rejected.
+</li>
+<p>
+let promise1 = new Promise((resolve, reject) => { <br>
+  setTimeout(resolve, 1000, "First"); <br>
+}); <br>
 
-myPromise
-  .then(result => {
-    console.log(result);
-    return "Second operation completed.";  // Returning a new value for the next `.then`
-  })
-  .then(result => {
-    console.log(result);
-    return "Third operation completed.";
-  })
-  .then(result => {
-    console.log(result);
-  })
-  .catch(error => {
-    console.error(error);
-  });
-```
+let promise2 = new Promise((resolve, reject) => { <br>
+  setTimeout(resolve, 2000, "Second"); <br>
+}); <br>
 
-### Promise.all:
+Promise.all([promise1, promise2]) <br>
+  .then(results => { <br>
+    console.log(results);  // ["First", "Second"] <br>
+  }) <br>
+  .catch(error => { <br>
+    console.log(error); <br>
+  }); <br>
+</p>
 
-`Promise.all` is used when you want to wait for multiple promises to resolve and then proceed with further operations. If any of the promises reject, `Promise.all` immediately rejects with the reason of the first promise that rejected.
+<h2>Promise.race:
+</h2>
+<li>`Promise.race` returns the result of the first promise that settles (either fulfills or rejects).
+</li>
+<p>
+let promise1 = new Promise((resolve, reject) => { <br>
+  setTimeout(resolve, 1000, "First"); <br>
+}); <br>
 
-```javascript
-let promise1 = new Promise((resolve, reject) => {
-  setTimeout(resolve, 1000, "First");
-});
+let promise2 = new Promise((resolve, reject) => { <br>
+  setTimeout(resolve, 500, "Second"); <br>
+}); <br>
 
-let promise2 = new Promise((resolve, reject) => {
-  setTimeout(resolve, 2000, "Second");
-});
-
-Promise.all([promise1, promise2])
-  .then(results => {
-    console.log(results);  // ["First", "Second"]
-  })
-  .catch(error => {
-    console.log(error);
-  });
-```
-
-### Promise.race:
-
-`Promise.race` returns the result of the first promise that settles (either fulfills or rejects).
-
-```javascript
-let promise1 = new Promise((resolve, reject) => {
-  setTimeout(resolve, 1000, "First");
-});
-
-let promise2 = new Promise((resolve, reject) => {
-  setTimeout(resolve, 500, "Second");
-});
-
-Promise.race([promise1, promise2])
-  .then(result => {
-    console.log(result);  // "Second" because it resolves first
-  })
-  .catch(error => {
-    console.log(error);
-  });
-```
-
-### `async`/`await` Syntax (Built on Promises):
-
-`async` and `await` are newer JavaScript features that allow you to work with promises in a more synchronous-looking manner. They make asynchronous code look and behave like synchronous code, which improves readability.
-
-- **`async`**: Marks a function as asynchronous and ensures it always returns a Promise.
-- **`await`**: Used inside an `async` function to pause execution until the Promise resolves.
-
-```javascript
-async function fetchData() {
-  try {
-    let response = await fetch('https://jsonplaceholder.typicode.com/posts');
-    let data = await response.json();
-    console.log(data);
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
+Promise.race([promise1, promise2]) <br>
+  .then(result => { <br>
+    console.log(result);  // "Second" because it resolves first <br>
+  }) <br>
+  .catch(error => { <br>
+    console.log(error); <br>
+  }); <br>
+</p>
+<h2> `async`/`await` Syntax (Built on Promises):
+</h2>
+<li>`async` and `await` are newer JavaScript features that allow you to work with promises in a more synchronous-looking manner. They make asynchronous code look and behave like synchronous code, which improves readability.
+</li>
+<p>`async`: Marks a function as asynchronous and ensures it always returns a Promise. </p>
+<p>`await`: Used inside an `async` function to pause execution until the Promise resolves.</p>
+<p>
+async function fetchData() { <br>
+  try { <br>
+    let response = await fetch('https://jsonplaceholder.typicode.com/posts'); <br>
+    let data = await response.json(); <br>
+    console.log(data); <br>
+  } catch (error) { <br>
+    console.error('Error:', error); <br>
+  } <br>
+} <br>
 
 fetchData();
-```
+</p>
 
-### Key Differences Between Promises and Callbacks:
-
-- **Readability**: Promises are more readable, as they avoid nested callbacks and allow for chaining `.then()` and `.catch()` for error handling.
-- **Error Handling**: Promises have a built-in mechanism for handling errors, either by using `.catch()` or `try`/`catch` with `async`/`await`.
-- **Concurrency**: Promises make it easier to handle multiple asynchronous operations concurrently using methods like `Promise.all()` and `Promise.race()`.
-
-### Conclusion:
-
-Promises provide a cleaner and more powerful way to handle asynchronous operations in JavaScript. By avoiding callback hell and offering better error handling and chaining capabilities, they make asynchronous code much easier to manage. If you're working with asynchronous operations, it’s highly recommended to use Promises or `async`/`await` for better readability and maintainability.
-
-Let me know if you'd like further examples or clarification!
-    </div>
+<h2> Key Differences Between Promises and Callbacks:
+</h2>
+<li>Readability:</li><p> Promises are more readable, as they avoid nested callbacks and allow for chaining `.then()` and `.catch()` for error handling.</p>
+<li>Error Handling</li><p>Promises have a built-in mechanism for handling errors, either by using `.catch()` or `try`/`catch` with `async`/`await`.</p>
+<li>Concurrency</li><p> Promises make it easier to handle multiple asynchronous operations concurrently using methods like `Promise.all()` and `Promise.race()`.</p>
+</div>
     
     <script>
         // Promises Examples
